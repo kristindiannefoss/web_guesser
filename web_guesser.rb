@@ -1,33 +1,46 @@
 require 'sinatra'
 require 'sinatra/reloader'
 
+# attr_accessor :number, :message, :color
+
 SECRET_NUMBER = Random.rand(0..100)
-def check_guess(guess)
-end
+OTHER_NUMBER  = Random.rand(0..100)
+# def check_guess(guess)
+# end
 # message = check_guess(guess)
 
+@@guess_count = 5
+@@number      = SECRET_NUMBER
 
   get '/' do
-      guess = params["guess"].to_i
-      if guess > SECRET_NUMBER
-        if guess > SECRET_NUMBER + 5
+    guess = params["guess"].to_i
+    @@guess_count -= 1
+    if @@guess_count < 5
+      if guess > @@number
+        if guess > @@number + 5
           @@message = "way too high"
           @@color   = "red"
         else
           @@message = "too high"
           @@color   = "salmon"
         end
-      elsif guess < SECRET_NUMBER
-        if guess < SECRET_NUMBER - 5
+      elsif guess < @@number
+        if guess < @@number - 5
           @@message = "way too low"
           @@color   = "red"
         else
           @@message = "too low"
           @@color   = "salmon"
         end
-      elsif guess == SECRET_NUMBER
-        @@message   = "You got it right! The secret number is #{SECRET_NUMBER}"
+      elsif guess == @@number
+        @@message   = "You got it right! The secret number is #{@@number}"
         @@color     = "green"
+        @@number      = OTHER_NUMBER
       end
-  erb :index, :locals => {:number => SECRET_NUMBER, :message => @@message, :color => @@color}
+    else
+      @@guess_count >= 5
+      @@number      = OTHER_NUMBER
+      @@message     = "You lose, the number has been reset"
+    end
+    erb :index, :locals => {:number => @@number, :message => @@message, :color => @@color}
   end

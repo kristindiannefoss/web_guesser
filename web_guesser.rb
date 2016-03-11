@@ -2,13 +2,8 @@ require 'sinatra'
 require 'sinatra/reloader'
 require 'pry'
 
-# attr_accessor :number, :message, :color
-
 SECRET_NUMBER = Random.rand(0..100)
 OTHER_NUMBER  = Random.rand(0..100)
-# def check_guess(guess)
-# end
-# message = check_guess(guess)
 
 @@guess_count = 5
 @@number      = SECRET_NUMBER
@@ -16,7 +11,6 @@ OTHER_NUMBER  = Random.rand(0..100)
 
   get '/' do
     guess = params["guess"].to_i
-      # binding.pry
     @@cheat = "the secret number is #{@@number}" if params["cheat"]
     @@guess_count -= 1
     if @@guess_count < 5

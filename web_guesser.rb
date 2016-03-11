@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'sinatra/reloader'
+require 'pry'
 
 # attr_accessor :number, :message, :color
 
@@ -11,9 +12,12 @@ OTHER_NUMBER  = Random.rand(0..100)
 
 @@guess_count = 5
 @@number      = SECRET_NUMBER
+@@cheat       = ""
 
   get '/' do
     guess = params["guess"].to_i
+      # binding.pry
+    @@cheat = "the secret number is #{@@number}" if params["cheat"]
     @@guess_count -= 1
     if @@guess_count < 5
       if guess > @@number
@@ -42,5 +46,5 @@ OTHER_NUMBER  = Random.rand(0..100)
       @@number      = OTHER_NUMBER
       @@message     = "You lose, the number has been reset"
     end
-    erb :index, :locals => {:number => @@number, :message => @@message, :color => @@color}
-  end
+    erb :index, :locals => {:number => @@number, :message => @@message, :color => @@color, :cheat => @@cheat}
+end
